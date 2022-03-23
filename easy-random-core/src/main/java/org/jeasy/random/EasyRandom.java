@@ -206,7 +206,11 @@ public class EasyRandom extends Random {
         if (!parameters.isOverrideDefaultInitialization() && getFieldValue(result, field) != null && !isPrimitiveFieldWithDefaultValue(result, field)) {
           return;
         }
-        fieldPopulator.populateField(result, field, context);
+        try {
+            fieldPopulator.populateField(result, field, context);
+        } catch (Throwable e) {
+            if (!parameters.isIgnoreFieldInitializationErrors()) throw e;
+        }
     }
 
     private LinkedHashSet<RandomizerRegistry> setupRandomizerRegistries(EasyRandomParameters parameters) {

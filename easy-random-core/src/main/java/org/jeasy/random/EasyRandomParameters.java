@@ -98,6 +98,7 @@ public class EasyRandomParameters {
     private boolean overrideDefaultInitialization;
     private boolean ignoreRandomizationErrors;
     private boolean bypassSetters;
+    private boolean ignoreFieldInitializationErrors;
     private Range<Integer> collectionSizeRange;
     private Range<Integer> stringLengthRange;
     private Range<LocalDate> dateRange;
@@ -123,6 +124,7 @@ public class EasyRandomParameters {
         overrideDefaultInitialization = false;
         ignoreRandomizationErrors = false;
         bypassSetters = false;
+        ignoreFieldInitializationErrors = false;
         objectPoolSize = DEFAULT_OBJECT_POOL_SIZE;
         randomizationDepth = DEFAULT_RANDOMIZATION_DEPTH;
         dateRange = new Range<>(DEFAULT_DATES_RANGE.getMin().toLocalDate(), DEFAULT_DATES_RANGE.getMax().toLocalDate());
@@ -220,6 +222,14 @@ public class EasyRandomParameters {
     }
     public void setIgnoreRandomizationErrors(boolean ignoreRandomizationErrors) {
         this.ignoreRandomizationErrors = ignoreRandomizationErrors;
+    }
+
+    public boolean isIgnoreFieldInitializationErrors() {
+        return bypassSetters;
+    }
+
+    public void setIgnoreFieldInitializationErrors(boolean bypassSetters) {
+        this.ignoreFieldInitializationErrors = bypassSetters;
     }
 
     public boolean isBypassSetters() {
@@ -557,6 +567,11 @@ public class EasyRandomParameters {
      */
     public EasyRandomParameters bypassSetters(boolean bypassSetters) {
         setBypassSetters(bypassSetters);
+        return this;
+    }
+
+    public EasyRandomParameters ignoreFieldInitializationErrors(boolean ignoreFieldInitializationErrors) {
+        setIgnoreFieldInitializationErrors(ignoreFieldInitializationErrors);
         return this;
     }
 
