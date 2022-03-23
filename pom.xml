@@ -247,4 +247,12 @@
         </profile>
     </profiles>
 
+    <distributionManagement>
+        <repository>
+            <id>github-vorpal-research-kotlin-maven</id>
+            <name>vorpal-research-kotlin-maven</name>
+            <url>https://maven.pkg.github.com/vorpal-research/kotlin-maven</url>
+        </repository>
+    </distributionManagement>
+
 </project>
