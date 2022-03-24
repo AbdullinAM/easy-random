@@ -27,12 +27,12 @@ import java.util.List;
 import java.util.Random;
 import org.jeasy.random.api.ObjectFactory;
 import org.jeasy.random.api.RandomizerContext;
+import org.jeasy.random.util.ReflectionFacade;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
 import java.lang.reflect.Constructor;
 
-import static org.jeasy.random.util.ReflectionUtils.getPublicConcreteSubTypesOf;
 import static org.jeasy.random.util.ReflectionUtils.isAbstract;
 
 /**
@@ -53,7 +53,8 @@ public class ObjenesisObjectFactory implements ObjectFactory {
             random = new Random(context.getParameters().getSeed());
         }
         if (context.getParameters().isScanClasspathForConcreteTypes() && isAbstract(type)) {
-            List<Class<?>> publicConcreteSubTypes = getPublicConcreteSubTypesOf(type);
+            ReflectionFacade reflectionFacade = context.getParameters().getReflectionFacade();
+            List<Class<?>> publicConcreteSubTypes = reflectionFacade.getPublicConcreteSubTypesOf(type);
             if (publicConcreteSubTypes.isEmpty()) {
                 throw new InstantiationError("Unable to find a matching concrete subtype of type: " + type + " in the classpath");
             } else {

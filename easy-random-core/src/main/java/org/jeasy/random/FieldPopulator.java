@@ -31,6 +31,7 @@ import org.jeasy.random.api.ContextAwareRandomizer;
 import org.jeasy.random.api.Randomizer;
 import org.jeasy.random.api.RandomizerProvider;
 import org.jeasy.random.randomizers.misc.SkipRandomizer;
+import org.jeasy.random.util.ReflectionFacade;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -143,7 +144,8 @@ class FieldPopulator {
             return optionalPopulator.getRandomOptional(field, context);
         } else {
             if (context.getParameters().isScanClasspathForConcreteTypes() && isAbstract(fieldType) && !isEnumType(fieldType) /*enums can be abstract, but can not inherit*/) {
-                List<Class<?>> parameterizedTypes = filterSameParameterizedTypes(getPublicConcreteSubTypesOf(fieldType), fieldGenericType);
+                ReflectionFacade reflectionFacade = context.getParameters().getReflectionFacade();
+                List<Class<?>> parameterizedTypes = filterSameParameterizedTypes(reflectionFacade.getPublicConcreteSubTypesOf(fieldType), fieldGenericType);
                 if (parameterizedTypes.isEmpty()) {
                     throw new ObjectCreationException("Unable to find a matching concrete subtype of type: " + fieldType);
                 } else {

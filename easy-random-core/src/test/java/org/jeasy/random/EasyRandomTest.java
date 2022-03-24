@@ -24,7 +24,10 @@
 package org.jeasy.random;
 
 import org.jeasy.random.api.Randomizer;
+import org.jeasy.random.api.RandomizerProvider;
 import org.jeasy.random.beans.*;
+import org.jeasy.random.util.ClassGraphFacade;
+import org.jeasy.random.util.ReflectionFacade;
 import org.jeasy.random.util.ReflectionUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -494,7 +497,8 @@ class EasyRandomTest {
     void tryToRandomizeAllPublicConcreteTypesInTheClasspath(){
         int success = 0;
         int failure = 0;
-        List<Class<?>> publicConcreteTypes = ReflectionUtils.getPublicConcreteSubTypesOf(Object.class);
+        ReflectionFacade reflectionFacade = new ClassGraphFacade();
+        List<Class<?>> publicConcreteTypes = reflectionFacade.getPublicConcreteSubTypesOf(Object.class);
         System.out.println("Found " + publicConcreteTypes.size() + " public concrete types in the classpath");
         for (Class<?> aClass : publicConcreteTypes) {
             try {

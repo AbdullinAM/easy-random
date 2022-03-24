@@ -26,6 +26,8 @@ package org.jeasy.random;
 import org.jeasy.random.api.*;
 import org.jeasy.random.randomizers.registry.CustomRandomizerRegistry;
 import org.jeasy.random.randomizers.registry.ExclusionRandomizerRegistry;
+import org.jeasy.random.util.ClassGraphFacade;
+import org.jeasy.random.util.ReflectionFacade;
 
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
@@ -106,6 +108,7 @@ public class EasyRandomParameters {
     private ExclusionPolicy exclusionPolicy;
     private ObjectFactory objectFactory;
     private RandomizerProvider randomizerProvider;
+    private ReflectionFacade reflectionFacade;
 
     // internal params
     private CustomRandomizerRegistry customRandomizerRegistry;
@@ -138,6 +141,7 @@ public class EasyRandomParameters {
         typeExclusionPredicates = new HashSet<>();
         exclusionPolicy = new DefaultExclusionPolicy();
         objectFactory = new ObjenesisObjectFactory();
+        reflectionFacade = new ClassGraphFacade();
     }
 
     public Range<Integer> getCollectionSizeRange() {
@@ -264,6 +268,14 @@ public class EasyRandomParameters {
         this.randomizerProvider = randomizerProvider;
     }
 
+    public ReflectionFacade getReflectionFacade() {
+        return reflectionFacade;
+    }
+    public void setReflectionFacade(ReflectionFacade reflectionFacade) {
+        Objects.requireNonNull(reflectionFacade, "Reflection facade must not be null");
+        this.reflectionFacade = reflectionFacade;
+    }
+
     public Set<Predicate<Field>> getFieldExclusionPredicates() {
         return fieldExclusionPredicates;
     }
@@ -377,6 +389,17 @@ public class EasyRandomParameters {
      */
     public EasyRandomParameters randomizerProvider(RandomizerProvider randomizerProvider) {
         setRandomizerProvider(randomizerProvider);
+        return this;
+    }
+
+    /**
+     * Provide a custom reflection facade.
+     *
+     * @param reflectionFacade to use
+     * @return the current {@link EasyRandomParameters} instance for method chaining
+     */
+    public EasyRandomParameters reflectionFacade(ReflectionFacade reflectionFacade) {
+        setReflectionFacade(reflectionFacade);
         return this;
     }
 

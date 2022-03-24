@@ -24,6 +24,8 @@
 package org.jeasy.random;
 
 import org.jeasy.random.api.RandomizerContext;
+import org.jeasy.random.util.ClassGraphFacade;
+import org.jeasy.random.util.ReflectionFacade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,7 +59,9 @@ class ObjenesisObjectFactoryTest {
 
     @Test
     void whenNoConcreteTypeIsFound_thenShouldThrowAnInstantiationError() {
+        ReflectionFacade reflectionFacade = new ClassGraphFacade();
         Mockito.when(context.getParameters().isScanClasspathForConcreteTypes()).thenReturn(true);
+        Mockito.when(context.getParameters().getReflectionFacade()).thenReturn(reflectionFacade);
         assertThatThrownBy(() -> objenesisObjectFactory.createInstance(AbstractFoo.class, context)).isInstanceOf(InstantiationError.class);
     }
 

@@ -23,41 +23,16 @@
  */
 package org.jeasy.random.util;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
-import io.github.classgraph.ClassGraph;
-import io.github.classgraph.ClassInfoList;
-import io.github.classgraph.ScanResult;
-
-/**
- * Facade for {@link io.github.classgraph.ClassGraph}. It is a separate class from {@link ReflectionUtils},
- * so that the classpath scanning - which can take a few seconds - is only done when necessary.
- *
- * @author Pascal Schumacher (https://github.com/PascalSchumacher)
- */
-public class ClassGraphFacade implements ReflectionFacade {
-    private final ConcurrentHashMap<Class<?>, List<Class<?>>> typeToConcreteSubTypes = new ConcurrentHashMap<>();
-    private final ScanResult scanResult = new ClassGraph().enableSystemJarsAndModules().enableClassInfo().scan();
-
-    public ClassGraphFacade() {}
+public interface ReflectionFacade {
 
     /**
      * Searches the classpath for all public concrete subtypes of the given interface or abstract class.
      *
      * @param type to search concrete subtypes of
+     * @param <T>  the actual type to introspect
      * @return a list of all concrete subtypes found
      */
-    @Override
-    public <T> List<Class<?>> getPublicConcreteSubTypesOf(final Class<T> type) {
-        return typeToConcreteSubTypes.computeIfAbsent(type, this::searchForPublicConcreteSubTypesOf);
-    }
-
-    private <T> List<Class<?>> searchForPublicConcreteSubTypesOf(final Class<T> type) {
-        String typeName = type.getName();
-        ClassInfoList subTypes = type.isInterface() ? scanResult.getClassesImplementing(typeName) : scanResult.getSubclasses(typeName);
-        List<Class<?>> loadedSubTypes = subTypes.filter(subType -> subType.isPublic() && !subType.isAbstract()).loadClasses(true);
-        return Collections.unmodifiableList(loadedSubTypes);
-    }
+    <T> List<Class<?>> getPublicConcreteSubTypesOf(final Class<T> type);
 }
