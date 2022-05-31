@@ -229,4 +229,8 @@ public class EasyRandom extends Random {
         return registries;
     }
 
+    public int nextBits(int bits) {
+        return next(bits);
+    }
+
 }
