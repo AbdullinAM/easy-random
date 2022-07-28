@@ -141,7 +141,7 @@ public class EasyRandomParameters {
         typeExclusionPredicates = new HashSet<>();
         exclusionPolicy = new DefaultExclusionPolicy();
         objectFactory = new ObjenesisObjectFactory();
-        reflectionFacade = new ClassGraphFacade();
+        reflectionFacade = null; // lazily initialize reflectionFacade
     }
 
     public Range<Integer> getCollectionSizeRange() {
@@ -269,6 +269,9 @@ public class EasyRandomParameters {
     }
 
     public ReflectionFacade getReflectionFacade() {
+        if (reflectionFacade == null) {
+            reflectionFacade = new ClassGraphFacade();
+        }
         return reflectionFacade;
     }
     public void setReflectionFacade(ReflectionFacade reflectionFacade) {
